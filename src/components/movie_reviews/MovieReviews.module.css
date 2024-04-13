@@ -1,0 +1,12 @@
+.movie_reviews_ul {
+  padding-left: 50px;
+}
+
+.movie_reviews_author {
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.movie_reviews_content {
+  margin-bottom: 15px;
+}
