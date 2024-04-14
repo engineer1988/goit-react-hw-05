@@ -5,7 +5,7 @@ import Loader from '../../components/loader/Loader';
 import toast from 'react-hot-toast';
 import { IoMdNotifications } from 'react-icons/io';
 import ErrorMessage from '../../components/error_message/ErrorMessage';
-import css from './MoviesPage.module.css';
+import MovieList from '../../components/movie_list/MovieList';
 
 const notify = () =>
   toast('Whoops, something went wrong! Please try reloading this page!', {
@@ -18,28 +18,18 @@ const notify = () =>
   });
 
 const MoviesPage = () => {
-  const [user, setUser] = useState(null);
+  const [arrayMovies, setArrayMovies] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
-  const search = searchParams.get('search');
+  const search = searchParams.get('search') ?? '';
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
-  // useEffect(() => {
-  //   // Тут виконуємо асинхронну операцію,
-  //   // наприклад HTTP-запит за інформацією про користувача
-  //   if (search === '') return;
-
-  //   async function fetchUser() {
-  //     const user = await FakeAPI.getUser(username);
-  //     setUser(user);
-  //   }
-
-  //   fetchUser();
-  // }, [username]);
   useEffect(() => {
     const loadSearchMovie = async () => {
       try {
         setLoading(true);
         const resData = await fetchSearchMovie(search);
-        setMovieCast(resData);
+        setArrayMovies(resData.results);
       } catch (error) {
         setError(true);
         notify();
@@ -53,17 +43,24 @@ const MoviesPage = () => {
   const handleSubmit = e => {
     e.preventDefault();
     const form = e.currentTarget;
-    setSearchParams({ username: form.elements.username.value });
+    setSearchParams({ search: form.elements.search.value });
     form.reset();
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="search" />
-        <button type="submit">Search</button>
-      </form>
-    </>
+    <div>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input type="text" name="search" />
+          <button type="submit">Search</button>
+        </form>
+      </div>
+      <div>
+        {loading && <Loader />}
+        {error && <ErrorMessage />}
+        {arrayMovies && <MovieList arrayMovies={arrayMovies} />}
+      </div>
+    </div>
   );
 };
 export default MoviesPage;

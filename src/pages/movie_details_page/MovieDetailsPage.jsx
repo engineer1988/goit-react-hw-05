@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router-dom';
+import { Outlet, useParams, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchMovieDetails } from '../../fetch_data';
 import Loader from '../../components/loader/Loader';
@@ -24,6 +24,9 @@ const MovieDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [movieDetails, setMovieDetails] = useState();
+  const location = useLocation();
+  // const backLinkHref = location.state ?? '/movies';
+  const backLinkHref = location.state;
 
   useEffect(() => {
     const loadMovieDetails = async () => {
@@ -49,7 +52,7 @@ const MovieDetailsPage = () => {
         <div className={css.movie_details_page_img_block__title_block}>
           <div className={css.movie_details_page_img_block}>
             <div className={css.movie_details_page_go_back}>
-              <Link to="/">
+              <Link to={backLinkHref}>
                 <HiOutlineArrowLongLeft />
                 Go back
               </Link>
