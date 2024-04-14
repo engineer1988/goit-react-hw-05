@@ -24,9 +24,9 @@ const MovieDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [movieDetails, setMovieDetails] = useState();
+  const [locationMovieList, setLocationMovieList] = useState('');
   const location = useLocation();
-  // const backLinkHref = location.state ?? '/movies';
-  const backLinkHref = location.state;
+  const backLinkHref = locationMovieList ?? '/movies';
 
   useEffect(() => {
     const loadMovieDetails = async () => {
@@ -34,6 +34,7 @@ const MovieDetailsPage = () => {
         setLoading(true);
         const resData = await fetchMovieDetails(movieId);
         setMovieDetails(resData);
+        setLocationMovieList(location.state);
       } catch (error) {
         setError(true);
         notify();
