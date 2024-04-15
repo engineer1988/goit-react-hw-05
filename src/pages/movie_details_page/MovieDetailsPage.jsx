@@ -1,5 +1,5 @@
 import { Outlet, useParams, useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { fetchMovieDetails } from '../../fetch_data';
 import Loader from '../../components/loader/Loader';
 import toast from 'react-hot-toast';
@@ -24,9 +24,10 @@ const MovieDetailsPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [movieDetails, setMovieDetails] = useState();
-  const [locationMovieList, setLocationMovieList] = useState('');
   const location = useLocation();
-  const backLinkHref = locationMovieList ?? '/movies';
+  const valueRef = useRef(location.state);
+
+  const backLinkHref = valueRef.current ?? '/movies';
 
   useEffect(() => {
     const loadMovieDetails = async () => {
@@ -34,7 +35,6 @@ const MovieDetailsPage = () => {
         setLoading(true);
         const resData = await fetchMovieDetails(movieId);
         setMovieDetails(resData);
-        setLocationMovieList(location.state);
       } catch (error) {
         setError(true);
         notify();
